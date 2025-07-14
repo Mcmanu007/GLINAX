@@ -1,0 +1,118 @@
+🚀 GLINAX PRIME USER FLOW (UPDATED)
+🟢 User opens site
+Guest session starts automatically
+→ guest_id stored in cookies or localStorage
+→ User can send messages via /api/chat/
+→ Limited to 5 messages
+→ Chat not saved until committed
+→ Guest is prompted to log in after limit
+
+✍️ Chat Interaction
+User sends prompt → gets AI reply from /api/chat/
+
+After 2 responses:
+→ /api/chat/commit/ auto-triggers backend save
+→ Title is generated using OpenAI
+→ Chat and messages stored permanently
+
+👤 User logs in or registers
+Auth token stored in localStorage
+
+Guest session ends or guest chat is migrated
+
+Token enables full access to user features
+
+🗂 Sidebar Behavior
+/api/chat/list/ loads all saved chats
+
+Chats display with:
+
+Title
+
+Three-dot context menu (rename, delete, share)
+
+Status: Not Shared / Shared by [X] (if user is owner)
+
+Collaborator count on hover
+
+Selecting a chat:
+→ Calls /api/chat/{chat_id}/messages/
+→ Chat opens with full history
+
+👥 Collaboration & Sharing
+Share Chat → /api/chat/{chat_id}/share/
+
+Share by email or username
+
+Creates pending collaborator invite
+
+Add Collaborator → /api/chat/{chat_id}/collaborators/add/
+
+Set access level: view / edit
+
+Only owners can add or remove
+
+List Collaborators → shown in modal
+
+Approved collaborators shown
+
+Pending invites marked
+
+Collaborators can't see or remove others
+
+Owners can remove collaborators
+
+Remove Collaborator → /api/chat/{chat_id}/collaborators/remove/
+
+Only owners can perform
+
+Backend returns 403 if not owner
+
+🧠 AI Feature Access (Premium)
+Clicking premium features (e.g. Upload, TTS, Transcribe) →
+→ System checks payment status via /api/payment/status/
+→ If unpaid:
+→ Redirects to /api/payment/initialize/
+→ Paystack webhook updates status
+→ User is now marked as paid
+
+💡 Premium Feature Access
+Once paid, user can access:
+
+/api/files/ — Upload and manage documents
+
+/api/audio/ — Generate and manage audio files
+
+/api/audio/generate/ — Text-to-speech
+
+/api/audio/transcribe/ — Audio-to-text
+
+/api/files/summary/ — Summarize documents
+
+/api/questions/generate/ — Generate questions from content
+
+🔁 On Page Refresh
+Session persists via localStorage token
+
+Chat history is reloaded
+
+Sidebar shows current chats
+
+Auto-scroll to most recent message
+
+
+
+take your time and let's break things down, 1. when the questions are mcqs the check boxes for the answers are not created. and when they are theory, the text area is not created for users to answer. 2. when i close the questions box or card, it doesn't appear as the button we discussed. 3. for the ask for explanation feature, just send a prompt like explain why this is the 'answer' to the 'question' and get a response in chat 4. save you answers and do a direct comparison for mcqs and a logical comparison with theory questions and at the end of the questions provide a submit button for user to submit their answers. then their score is displayed. save their score into local storage so they can see their scores. 6. for visuals kindly render the images well so users can see. it clearly. 
+it worked perfectly, now let's do this. 
+some fixes before we continue to the other features finish fast then we work on the payment plan.
+ so first of all. at the top of the page i am seeing 'welcome undefined' fix that. 
+2. on page reload, the question pop up is the first thing i see, which is not ideal, remove that.
+3. the chat button should disappear after you have finished answer the questions. 
+if you want it again you have to go to the inventory. 4. in the inventory, there is no download button.
+5. for the chat input field, let it grow as the lines of text grow, to a certain limit say five lines, 
+and the send button should be an icon inside the input field and when click it should be loading or 
+change form like a circular load, the input field should be rounded and nice, use the ui components for that,
+it's nice, and also in mobile view the side bar should disappear and there should be a button to toggle it's 
+appearing and disappearing. also when the ai response is being rendered on the page an indicator
+like typing... or respond... should be displayed.
+lastly I want custom spinners for page loading and stuff. after this we continue. 
