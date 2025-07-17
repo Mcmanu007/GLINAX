@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Chat, ChatHistory
+from .models import AudioFile, TextToSpeech
 
 class ChatHistorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -76,3 +77,17 @@ class AddCollaboratorSerializer(serializers.Serializer):
 
 class ApproveCollaboratorSerializer(serializers.Serializer):
     chat_id = serializers.IntegerField()
+
+
+# serializers.py - Add these new serializers
+class AudioFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AudioFile
+        fields = ['id', 'file', 'transcript', 'created_at']
+        read_only_fields = ['id', 'created_at', 'transcript']
+
+class TextToSpeechSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TextToSpeech
+        fields = ['id', 'text', 'audio_file', 'created_at']
+        read_only_fields = ['id', 'created_at', 'audio_file']

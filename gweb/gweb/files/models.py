@@ -28,7 +28,7 @@ class File(models.Model):
     def __str__(self):
         return f"{self.file.name} ({self.user.username})"
 
-# In files/models.py
+
 
 class Audio(models.Model):
     SOURCE_TYPES = [
@@ -36,7 +36,7 @@ class Audio(models.Model):
         ('transcription', 'Transcription'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='audio_files')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='file_audio_files')
     file = models.ForeignKey('File', null=True, blank=True, on_delete=models.SET_NULL, related_name='linked_audio')
     text_input = models.TextField(null=True, blank=True)
     audio = models.FileField(upload_to='uploads/audio/')

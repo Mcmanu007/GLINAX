@@ -26,7 +26,6 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Load from .env
 
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -171,6 +170,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'gweb.wsgi.application'
 
+OPENAI_API_KEY='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'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

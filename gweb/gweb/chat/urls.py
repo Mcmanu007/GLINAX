@@ -5,7 +5,9 @@ from .views import (
     ShareChatAPIView, AddCollaboratorAPIView, RemoveCollaboratorAPIView,
     ChatDetailView, ChatMessagesView, EmailShareAPIView,
     ListCollaboratorsAPIView, ApproveCollaborationAPIView,
-    PendingCollaborationsAPIView, ListUsersAPIView, RejectCollaborationAPIView
+    PendingCollaborationsAPIView, ListUsersAPIView, RejectCollaborationAPIView,
+    AudioToTextView,TextToAudioView
+
 )
 
 urlpatterns = [
@@ -28,6 +30,10 @@ urlpatterns = [
     path('<int:chat_id>/collaborators/approve/', ApproveCollaborationAPIView.as_view(), name='collaborator-approve'),
     path('collaborators/pending/', PendingCollaborationsAPIView.as_view(), name='collaborator-pending'),
     path('<int:chat_id>/collaborators/reject/', RejectCollaborationAPIView.as_view(), name='collaborator-reject'),
+   
+    path('audio/transcribe/', AudioToTextView.as_view(), name='audio-to-text'),
+    path('audio/generate/', TextToAudioView.as_view(), name='text-to-audio'),
+
 
     # Sharing
     path('<int:chat_id>/share/', ShareChatAPIView.as_view(), name='chat-share'),

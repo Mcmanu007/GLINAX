@@ -6,7 +6,7 @@ from django.contrib.postgres.fields import JSONField  # if using PostgreSQL
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='auth_profile')
     has_paid = models.BooleanField(default=False)
     payment_date = models.DateTimeField(null=True, blank=True)
     paystack_customer_id = models.CharField(max_length=100, null=True, blank=True)

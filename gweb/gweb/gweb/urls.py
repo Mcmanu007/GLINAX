@@ -17,9 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from django.contrib import admin
+from django.urls import path, include
+from django.views.generic import TemplateView
+
+from payments import views 
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('g_auth.urls')),
     path('api/chat/', include('chat.urls')),
     path('api/', include('files.urls')),
+    path('pay/', views.initiate_payment, name='initiate_payment'),
+    path('payment/verify/', views.verify_payment, name='verify_payment'),
+    path('payment/webhook/', views.paystack_webhook, name='paystack_webhook'),
+    # Fallback URLs if views aren't available
+    path('payment/error/', TemplateView.as_view(template_name='payments/error.html'), name='payment_error'),
 ]
