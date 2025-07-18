@@ -19,9 +19,8 @@ urlpatterns = [
     path("audio/generate/", GenerateAudioAPIView.as_view(), name="generate-audio"),
     path("audio/", ListAudioAPIView.as_view(), name="list-audio"),
     path("audio/<int:audio_id>/delete/", DeleteAudioAPIView.as_view(), name="delete-audio"),
-    path("audio/<int:audio_id>/delete/", DeleteAudioAPIView.as_view(), name="delete-audio"),
     path('audio/<int:audio_id>/share/', ShareAudioAPIView.as_view(), name='share-audio'),
     path('audio/shared/<int:share_id>/respond/', RespondSharedAudioAPIView.as_view(), name='respond-shared-audio'),
     path('audio/shared/', ListSharedAudioAPIView.as_view(), name='list-shared-audio'),
-    path('audio/generate/', TextToAudioView.as_view(), name='text-to-audio'),
+    path('audio/text/', TextToAudioView.as_view(), name='text-to-audio'),
 ]
