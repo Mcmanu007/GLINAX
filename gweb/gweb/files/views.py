@@ -519,3 +519,73 @@ class ListSharedAudioAPIView(APIView):
             "sent": SharedAudioSerializer(sent, many=True).data,
         }
         return Response(data, status=status.HTTP_200_OK)
+
+
+class Audio(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        audio_file = request.FILES.get('audio')
+        if not audio_file:
+            return Response({"error": "No audio file provided"}, status=400)
+        
+        # Save the audio file first
+        audio_obj = AudioFile.objects.create(
+            user=request.user,
+            file=audio_file
+        )
+        
+        try:
+            # Transcribe using OpenAI Whisper
+            with open(audio_obj.file.path, 'rb') as f:
+                transcript = client.audio.transcriptions.create(
+                    model="whisper-1", 
+                    file=f
+                )
+            
+            audio_obj.transcript = transcript.text
+            audio_obj.save()
+            
+            return Response({
+                "id": audio_obj.id,
+                "transcript": transcript.text
+            })
+            
+        except Exception as e:
+            logger.error(f"Audio transcription failed: {str(e)}")
+            return Response({"error": "Transcription failed"}, status=500)
+
+class TextToAudioView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        text = request.data.get('text')
+        if not text:
+            return Response({"error": "No text provided"}, status=400)
+        
+        try:
+            # Generate speech using OpenAI TTS
+            response = client.audio.speech.create(
+                model="tts-1",
+                voice="alloy",
+                input=text
+            )
+            
+            # Save the response
+            tts_obj = TextToSpeech.objects.create(
+                user=request.user,
+                text=text
+            )
+            
+            # Save the audio file
+            file_path = f"text_to_speech/{tts_obj.id}.mp3"
+            tts_obj.audio_file.save(file_path, ContentFile(response.content))
+            
+            return Response({
+                "id": tts_obj.id,
+                "audio_url": request.build_absolute_uri(tts_obj.audio_file.url)
+            })
+            
+        except Exception as e:
+            logger.error(f"Text-to-speech failed: {str(e)}")
+            return Response({"error": "Text-to-speech conversion failed"}, status=500)
