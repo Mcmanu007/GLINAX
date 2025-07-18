@@ -79,13 +79,7 @@ class ApproveCollaboratorSerializer(serializers.Serializer):
     chat_id = serializers.IntegerField()
 
 
-# serializers.py - Add these new serializers
-class AudioFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AudioFile
-        fields = ['id', 'file', 'transcript', 'created_at']
-        read_only_fields = ['id', 'created_at', 'transcript']
-
+# serializers
 class TextToSpeechSerializer(serializers.ModelSerializer):
     class Meta:
         model = TextToSpeech
