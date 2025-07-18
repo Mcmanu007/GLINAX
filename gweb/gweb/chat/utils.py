@@ -1,6 +1,6 @@
 from openai import OpenAI
 import logging
-
+from .models import TextToSpeech
 logger = logging.getLogger(__name__)
 client = OpenAI()
 
@@ -35,3 +35,27 @@ def get_client_ip(request):
         return x_forwarded.split(',')[0].strip()
     return request.META.get('REMOTE_ADDR')
 
+
+def text_to_audio(user, text):
+    """
+    Generate speech from text using OpenAI TTS and save the audio to the database.
+    """
+    try:
+        response = client.audio.speech.create(
+            model="tts-1",
+            voice="alloy",
+            input=text
+        )
+
+        tts_obj = TextToSpeech.objects.create(
+            user=user,
+            text=text
+        )
+
+        file_path = f"text_to_speech/{tts_obj.id}.mp3"
+        tts_obj.audio_file.save(file_path, ContentFile(response.content))
+
+        return tts_obj
+    except Exception as e:
+        logger.error(f"TTS generation failed: {e}")
+        return None
