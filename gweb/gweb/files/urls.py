@@ -4,7 +4,7 @@ from .views import (
     GenerateQuestionsAPIView, ListGeneratedQuestionsAPIView, FileSummaryAPIView,
     GenerateAudioAPIView, ListAudioAPIView, DeleteAudioAPIView, ShareAudioAPIView,
     RespondSharedAudioAPIView,
-    ListSharedAudioAPIView,TextToAudioView
+    ListSharedAudioAPIView
 
 )
 from .views import FileUploadAPIView, ScoreQuestionsAPIView, DeleteGeneratedQuestionAPIView
