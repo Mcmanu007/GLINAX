@@ -557,35 +557,34 @@ class Audio(APIView):
 
 class TextToAudioView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def post(self, request):
-        text = request.data.get('text')
-        if not text:
-            return Response({"error": "No text provided"}, status=400)
-        
+        serializer = TextToSpeechRequestSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=400)
+
+        text = serializer.validated_data['text']
+        voice = serializer.validated_data.get('voice', 'alloy')
+
         try:
             # Generate speech using OpenAI TTS
             response = client.audio.speech.create(
                 model="tts-1",
-                voice="alloy",
+                voice=voice,
                 input=text
             )
-            
-            # Save the response
+
             tts_obj = TextToSpeech.objects.create(
                 user=request.user,
-                text=text
+                text=text,
+                voice=voice
             )
-            
-            # Save the audio file
+
             file_path = f"text_to_speech/{tts_obj.id}.mp3"
             tts_obj.audio_file.save(file_path, ContentFile(response.content))
-            
-            return Response({
-                "id": tts_obj.id,
-                "audio_url": request.build_absolute_uri(tts_obj.audio_file.url)
-            })
-            
+
+            return Response(TextToSpeechSerializer(tts_obj, context={'request': request}).data)
+        
         except Exception as e:
             logger.error(f"Text-to-speech failed: {str(e)}")
             return Response({"error": "Text-to-speech conversion failed"}, status=500)
