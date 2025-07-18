@@ -4,7 +4,7 @@ from .views import (
     GenerateQuestionsAPIView, ListGeneratedQuestionsAPIView, FileSummaryAPIView,
     GenerateAudioAPIView, ListAudioAPIView, DeleteAudioAPIView, ShareAudioAPIView,
     RespondSharedAudioAPIView,
-    ListSharedAudioAPIView,
+    ListSharedAudioAPIView,TextToAudioView
 
 )
 from .views import FileUploadAPIView, ScoreQuestionsAPIView, DeleteGeneratedQuestionAPIView
@@ -23,5 +23,5 @@ urlpatterns = [
     path('audio/<int:audio_id>/share/', ShareAudioAPIView.as_view(), name='share-audio'),
     path('audio/shared/<int:share_id>/respond/', RespondSharedAudioAPIView.as_view(), name='respond-shared-audio'),
     path('audio/shared/', ListSharedAudioAPIView.as_view(), name='list-shared-audio'),
-
+    path('audio/generate/', TextToAudioView.as_view(), name='text-to-audio'),
 ]
