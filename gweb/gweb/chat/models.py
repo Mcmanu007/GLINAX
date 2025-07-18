@@ -48,15 +48,6 @@ class ChatHistory(models.Model):
         return f"ChatMessage {self.id} - {self.user.username}"
 
 
-class AudioFile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chat_audio_files')
-    file = models.FileField(upload_to='audio_files/')
-    transcript = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    def __str__(self):
-        return f"Audio {self.id} - {self.user.username}"
-
 class TextToSpeech(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='text_to_speech')
     text = models.TextField()
