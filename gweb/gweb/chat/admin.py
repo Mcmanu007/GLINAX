@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Chat, ChatHistory, ChatCollaborator, AudioFile, TextToSpeech
+from .models import Chat, ChatHistory, ChatCollaborator,TextToSpeech
 
 @admin.register(Chat)
 class ChatAdmin(admin.ModelAdmin):
@@ -25,13 +25,7 @@ class ChatCollaboratorAdmin(admin.ModelAdmin):
     search_fields = ('chat__title', 'collaborator__username')
     raw_id_fields = ('chat', 'collaborator', 'added_by')
 
-@admin.register(AudioFile)
-class AudioFileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'created_at', 'file')
-    list_filter = ('created_at',)
-    search_fields = ('transcript', 'user__username')
-    raw_id_fields = ('user',)
-    readonly_fields = ('transcript', 'created_at')
+
 
 @admin.register(TextToSpeech)
 class TextToSpeechAdmin(admin.ModelAdmin):
