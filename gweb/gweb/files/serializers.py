@@ -43,7 +43,7 @@ class FileSummarySerializer(serializers.ModelSerializer):
 from rest_framework import serializers
 from .models import Audio, File
 
-class TextToSpeechSerializer(serializers.Serializer):
+class TextToSpeechRequestSerializer(serializers.Serializer):
     text = serializers.CharField(required=False, allow_blank=True)
     file_id = serializers.IntegerField(required=False)
     voice = serializers.ChoiceField(
