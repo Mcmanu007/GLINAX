@@ -64,7 +64,7 @@ class TextToSpeechSerializer(serializers.Serializer):
 
 
 from rest_framework import serializers
-from .models import Audio, SharedAudio
+from .models import Audio, SharedAudio, TexttoSpeech
 
 class AudioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -83,3 +83,10 @@ class SharedAudioSerializer(serializers.ModelSerializer):
             "status", "note", "shared_at", "responded_at"
         ]
         read_only_fields = ["shared_by", "shared_at", "responded_at", "status"]
+
+class TextToSpeechSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TextToSpeech
+        fields = ['id', 'text', 'audio_file', 'created_at']
+        read_only_fields = ['id', 'created_at', 'audio_file']
+
