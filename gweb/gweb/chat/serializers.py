@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Chat, ChatHistory
-from .models import AudioFile, TextToSpeech
+from .models import TextToSpeech
 
 class ChatHistorySerializer(serializers.ModelSerializer):
     class Meta:
