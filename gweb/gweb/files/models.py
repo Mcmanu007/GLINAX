@@ -134,13 +134,6 @@ class SharedAudio(models.Model):
         return f"{self.audio.id} from {self.shared_by.username} to {self.shared_with.username} [{self.status}]"
 
 
-class TextToSpeech(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='text_to_speech')
-    text = models.TextField()
-    audio_file = models.FileField(upload_to='text_to_speech/', blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    def __str__(self):
-        return f"TTS {self.id} - {self.user.username}"
+
 
         
