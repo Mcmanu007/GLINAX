@@ -43,7 +43,7 @@ class FileSummarySerializer(serializers.ModelSerializer):
 from rest_framework import serializers
 from .models import Audio, File
 
-class TextToSpeechRequestSerializer(serializers.Serializer):
+class TextToSpeechSerializer(serializers.Serializer):
     text = serializers.CharField(required=False, allow_blank=True)
     file_id = serializers.IntegerField(required=False)
     voice = serializers.ChoiceField(
@@ -64,7 +64,7 @@ class TextToSpeechRequestSerializer(serializers.Serializer):
 
 
 from rest_framework import serializers
-from .models import Audio, SharedAudio, TexttoSpeech
+from .models import Audio, SharedAudio
 
 class AudioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -83,10 +83,3 @@ class SharedAudioSerializer(serializers.ModelSerializer):
             "status", "note", "shared_at", "responded_at"
         ]
         read_only_fields = ["shared_by", "shared_at", "responded_at", "status"]
-
-class TextToSpeechSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TextToSpeech
-        fields = ['id', 'text', 'audio_file', 'created_at']
-        read_only_fields = ['id', 'created_at', 'audio_file']
-
