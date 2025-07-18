@@ -6,7 +6,7 @@ from .views import (
     ChatDetailView, ChatMessagesView, EmailShareAPIView,
     ListCollaboratorsAPIView, ApproveCollaborationAPIView,
     PendingCollaborationsAPIView, ListUsersAPIView, RejectCollaborationAPIView,
-    AudioToTextView,TextToAudioView
+    TextToAudioView
 
 )
 
@@ -31,7 +31,6 @@ urlpatterns = [
     path('collaborators/pending/', PendingCollaborationsAPIView.as_view(), name='collaborator-pending'),
     path('<int:chat_id>/collaborators/reject/', RejectCollaborationAPIView.as_view(), name='collaborator-reject'),
    
-    path('audio/transcribe/', AudioToTextView.as_view(), name='audio-to-text'),
     path('audio/generate/', TextToAudioView.as_view(), name='text-to-audio'),
 
 
