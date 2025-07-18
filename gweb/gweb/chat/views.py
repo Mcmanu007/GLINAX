@@ -22,7 +22,7 @@ from .serializers import (
     ChatCollaboratorSerializer,
 )
 from django.core.files.base import ContentFile
-from.models import AudioFile, TextToSpeech
+from.models import TextToSpeech
 from .utils import get_client_ip, generate_chat_title_from_openai
 
 from g_auth.models import GuestChatTracker, GuestIPTracker
@@ -606,39 +606,7 @@ class RejectCollaborationAPIView(APIView):
 
 
 # views.py - Add these new views
-class AudioToTextView(APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def post(self, request):
-        audio_file = request.FILES.get('audio')
-        if not audio_file:
-            return Response({"error": "No audio file provided"}, status=400)
-        
-        # Save the audio file first
-        audio_obj = AudioFile.objects.create(
-            user=request.user,
-            file=audio_file
-        )
-        
-        try:
-            # Transcribe using OpenAI Whisper
-            with open(audio_obj.file.path, 'rb') as f:
-                transcript = client.audio.transcriptions.create(
-                    model="whisper-1", 
-                    file=f
-                )
-            
-            audio_obj.transcript = transcript.text
-            audio_obj.save()
-            
-            return Response({
-                "id": audio_obj.id,
-                "transcript": transcript.text
-            })
-            
-        except Exception as e:
-            logger.error(f"Audio transcription failed: {str(e)}")
-            return Response({"error": "Transcription failed"}, status=500)
+
 
 class TextToAudioView(APIView):
     permission_classes = [IsAuthenticated]
