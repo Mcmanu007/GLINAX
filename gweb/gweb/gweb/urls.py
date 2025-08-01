@@ -16,15 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from django.http import HttpResponse
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 
 from payments import views 
 
+def home(request):
+    return HttpResponse("🍻Welcome to the Glinax Backend!")
 
 urlpatterns = [
+    path('', home),
     path('admin/', admin.site.urls),
     path('api/auth/', include('g_auth.urls')),
     path('api/chat/', include('chat.urls')),

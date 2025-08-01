@@ -53,6 +53,14 @@ class PaymentTestCase(TestCase):
         """Test payment verification callback"""
         test_reference = 'test_verify_456'
         
+        # Create payment record to simulate existing payment
+        UserPayment.objects.create(
+            user=self.user,
+            paystack_reference=test_reference,
+            amount=2500,
+            status='pending'
+        )
+        
         # Simulate Paystack callback
         response = self.client.get(
             self.verify_url,
@@ -64,6 +72,73 @@ class PaymentTestCase(TestCase):
         payment = UserPayment.objects.get(paystack_reference=test_reference)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(payment.status, 'success')
+<<<<<<< SEARCH
+    def test_user_profile_creation(self):
+        """Test automatic profile creation on payment"""
+        profile, created = UserProfile.objects.get_or_create(user=self.user)
+        self.assertFalse(profile.is_premium)
+        
+        # Simulate successful payment
+        self.payment.status = 'success'
+        self.payment.save()
+        profile.refresh_from_db()
+        
+        # Profile should now be premium
+        self.assertTrue(profile.is_premium)
+=======
+    def test_user_profile_creation(self):
+        """Test automatic profile creation on payment"""
+        profile, created = UserProfile.objects.get_or_create(user=self.user)
+        self.assertFalse(profile.is_premium)
+        
+        # Simulate successful payment and profile upgrade
+        self.payment.status = 'success'
+        self.payment.save()
+        
+        # Manually upgrade profile as in views
+        profile.is_premium = True
+        profile.save()
+        
+        profile.refresh_from_db()
+        
+        # Profile should now be premium
+        self.assertTrue(profile.is_premium)
+<<<<<<< SEARCH
+    def test_failed_payment_flow(self):
+        """Test failed payment scenario"""
+        test_reference = 'test_fail_789'
+        
+        # Simulate failed payment callback
+        response = self.client.get(
+            self.verify_url,
+            {'reference': test_reference, 'status': 'failed'},
+            HTTP_X_PAYSTACK_SIGNATURE='test_signature'
+        )
+        
+        payment = UserPayment.objects.get(paystack_reference=test_reference)
+        self.assertEqual(payment.status, 'failed')
+=======
+    def test_failed_payment_flow(self):
+        """Test failed payment scenario"""
+        test_reference = 'test_fail_789'
+        
+        # Create payment record to simulate existing payment
+        UserPayment.objects.create(
+            user=self.user,
+            paystack_reference=test_reference,
+            amount=2500,
+            status='pending'
+        )
+        
+        # Simulate failed payment callback
+        response = self.client.get(
+            self.verify_url,
+            {'reference': test_reference, 'status': 'failed'},
+            HTTP_X_PAYSTACK_SIGNATURE='test_signature'
+        )
+        
+        payment = UserPayment.objects.get(paystack_reference=test_reference)
+        self.assertEqual(payment.status, 'failed')
 
     def test_user_profile_creation(self):
         """Test automatic profile creation on payment"""

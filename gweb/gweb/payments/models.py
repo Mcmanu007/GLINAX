@@ -19,7 +19,7 @@ class UserPayment(models.Model):
     raw_response = models.JSONField(null=True, blank=True)  # store full Paystack webhook response
 
     def __str__(self):
-        return f"{self.user.username} - {self.status} - {self.amount} GHS"
+        return f"{self.user.username} - {self.status} - {self.amount:.2f} GHS"
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')

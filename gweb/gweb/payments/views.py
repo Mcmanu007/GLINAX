@@ -15,6 +15,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 # ========== PAYMENT VIEWS ==========
 
 @login_required
@@ -23,8 +24,7 @@ def initiate_payment(request):
     try:
         # Prevent duplicate premium purchases
         if hasattr(request.user, 'userprofile') and request.user.userprofile.is_premium:
-            return render(request, 'payment_error.html', 
-                        {"message": "You already have a premium account"})
+            return JsonResponse({"error": "You already have a premium account"}, status=400)
 
         response = requests.post(
             "https://api.paystack.co/transaction/initialize",
@@ -50,17 +50,15 @@ def initiate_payment(request):
         )
 
         if response.status_code == 200:
-            return redirect(response.json()['data']['authorization_url'])
+            return JsonResponse({"authorization_url": response.json()['data']['authorization_url']})
         else:
             error_data = response.json()
             logger.error(f"Paystack error: {error_data.get('message')}")
-            return render(request, 'payment_error.html', 
-                         {"message": error_data.get('message', 'Payment failed')})
+            return JsonResponse({"error": error_data.get('message', 'Payment failed')}, status=400)
 
     except requests.exceptions.RequestException as e:
         logger.error(f"Payment initiation failed: {str(e)}")
-        return render(request, 'payment_error.html', 
-                     {"message": "Payment service unavailable. Please try again later."})
+        return JsonResponse({"error": "Payment service unavailable. Please try again later."}, status=503)
 
 @login_required
 @transaction.atomic
@@ -68,12 +66,11 @@ def verify_payment(request):
     """Transaction-protected payment verification"""
     reference = request.GET.get('reference')
     if not reference:
-        return HttpResponseBadRequest("Missing reference")
+        return JsonResponse({"error": "Missing reference"}, status=400)
 
     # Check for duplicate payment
     if UserPayment.objects.filter(paystack_reference=reference).exists():
-        return render(request, 'payment_success.html', 
-                     {"message": "Payment already processed"})
+        return JsonResponse({"message": "Payment already processed"}, status=200)
 
     try:
         response = requests.get(
@@ -101,13 +98,12 @@ def verify_payment(request):
                 profile.is_premium = True
                 profile.save()
 
-                return render(request, 'payment_success.html', {'data': data})
+                return JsonResponse({"message": "Payment successful", "data": data}, status=200)
 
     except requests.exceptions.RequestException as e:
         logger.error(f"Payment verification failed: {str(e)}")
 
-    return render(request, 'payment_error.html', 
-                {"message": "Payment verification failed. Please contact support."})
+    return JsonResponse({"error": "Payment verification failed. Please contact support."}, status=500)
 
 @csrf_exempt
 def paystack_webhook(request):

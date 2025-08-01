@@ -26,11 +26,14 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Load from .env
 
+# Paystack configuration
+PAYSTACK_SECRET_KEY = os.getenv('PAYSTACK_SECRET_KEY', '')
+PAYSTACK_PUBLIC_KEY = os.getenv('PAYSTACK_PUBLIC_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -83,15 +86,18 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'gweb.urls'
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
-
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+#     "http://10.1.254.53:3000",
+# ]
 # Optional for debugging:
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://10.1.254.53:3000",
+#   |  "*",
 ]
 
 from datetime import timedelta
@@ -170,7 +176,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'gweb.wsgi.application'
 
-OPENAI_API_KEY='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'
+import os
+
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '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')
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

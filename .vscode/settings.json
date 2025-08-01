@@ -1,0 +1,16 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "database": "gwebDB",
+            "username": "postgres",
+            "name": "gwebDB"
+        }
+    ],
+    "cSpell.ignoreWords": [
+        "Welcome"
+    ]
+}
